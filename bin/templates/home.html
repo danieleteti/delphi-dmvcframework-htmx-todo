@@ -1,0 +1,15 @@
+<div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-top">
+    <form id="todoForm" class="uk-form-horizontal" hx-post="/add" hx-swap="beforeend" hx-target="#todoItems"
+        hx-trigger="submit">
+        <div class="uk-margin uk-inline uk-width-1-1" uk-margin>
+            <span class="uk-form-icon" uk-icon="icon: plus"></span>
+            <input id="contentInput" autocomplete="off" class="uk-input" type="text" name="content"
+                placeholder="Write your task here...">
+        </div>
+    </form>
+    <ul id="todoItems" class="uk-list uk-list-divider" hx-target="closest li" hx-swap="outerHTML">
+        {{#todos}}
+        {{>todo/item}}
+        {{/todos}}
+    </ul>
+</div>
