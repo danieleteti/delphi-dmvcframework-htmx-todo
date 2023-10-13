@@ -9,3 +9,6 @@ It uses:
 - MVCActiveRecord (with a SQLite database)
 
 Tested on MS Windows but it should work also for Linux
+
+### Screenshot
+![To-Do App](https://raw.githubusercontent.com/danieleteti/delphi-dmvcframework-htmx-todo/main/docs/page1.png)
