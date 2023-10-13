@@ -3,10 +3,12 @@
 This demo is about htmx support in DMVCFramework.
 
 It uses:
-- DMVCFramework
-- htmx
+- [DMVCFramework](https://github.com/danieleteti/delphimvcframework)
+- [htmx](https://htmx.org/)
 - mustache
 - MVCActiveRecord (with a SQLite database)
+
+[My Blog](https://www.danieleteti.it)
 
 Tested on MS Windows but it should work also for Linux
 
