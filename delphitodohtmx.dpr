@@ -37,6 +37,7 @@ begin
 
     LServer.Active := True;
     WriteLn('Listening on port ', APort);
+    WriteLn('Navigate to http://localhost:', APort);
     Write('CTRL+C to shutdown the server');
     WaitForTerminationSignal;
     EnterInShutdownState;

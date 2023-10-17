@@ -81,7 +81,7 @@ begin
   FMVC.AddMiddleware(TMVCStaticFilesMiddleware.Create('', TPath.Combine(ExtractFilePath(GetModuleName(HInstance)), 'www')));
 
   FMVC.SetViewEngine(TMVCMustacheViewEngine);
-  FMVC.AddSerializer(TMVCMediaType.APPLICATION_FORM_URLENCODED, TMVCURLEncodedDataSerializer.Create);
+  FMVC.AddSerializer(TMVCMediaType.APPLICATION_FORM_URLENCODED, TMVCURLEncodedSerializer.Create);
   
   // Trace middlewares produces a much detailed log for debug purposes
   //FMVC.AddMiddleware(TMVCTraceMiddleware.Create);
