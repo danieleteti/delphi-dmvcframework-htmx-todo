@@ -37,7 +37,7 @@ uses
   MVCFramework.Middleware.ETag,
   MVCFramework.Middleware.Compression,
   MVCFramework.Serializer.URLEncoded,
-  Controllers.MainU;
+  Controllers.MainU, FDConnectionConfigU;
 
 procedure TMyWebModule.WebModuleCreate(Sender: TObject);
 begin
@@ -90,10 +90,9 @@ begin
   //FMVC.AddMiddleware(TMVCCORSMiddleware.Create);
   
   // Simplifies TMVCActiveRecord connection definition
-//  FMVC.AddMiddleware(TMVCActiveRecordMiddleware.Create(
-//    dotEnv.Env('firedac.connection_definition_name', 'MyConnDef'),
-//    dotEnv.Env('firedac.connection_definitions_filename', 'FDConnectionDefs.ini')
-//  ));
+  FMVC.AddMiddleware(TMVCActiveRecordMiddleware.Create(
+    CON_DEF_NAME, ''
+  ));
 
   
   // Compression middleware must be the last in the chain, just before the ETag, if present.

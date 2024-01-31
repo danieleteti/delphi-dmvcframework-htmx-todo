@@ -16,7 +16,7 @@ uses
   IdHTTPWebBrokerBridge,
   Controllers.MainU in 'Controllers.MainU.pas',
   WebModuleU in 'WebModuleU.pas' {MyWebModule: TWebModule},
-  Entitiles.TodoU in 'Entitiles.TodoU.pas',
+  Entities.TodoU in 'Entities.TodoU.pas',
   FDConnectionConfigU in 'FDConnectionConfigU.pas';
 
 {$R *.res}
@@ -26,7 +26,7 @@ procedure RunServer(APort: Integer);
 var
   LServer: TIdHTTPWebBrokerBridge;
 begin
-  Writeln('** DMVCFramework Server ** build ' + DMVCFRAMEWORK_VERSION);
+  LogI('** DMVCFramework Server ** build ' + DMVCFRAMEWORK_VERSION);
   LServer := TIdHTTPWebBrokerBridge.Create(nil);
   try
     LServer.OnParseAuthentication := TMVCParseAuthentication.OnParseAuthentication;
@@ -36,9 +36,9 @@ begin
     LServer.ListenQueue := dotEnv.Env('dmvc.indy.listen_queue', 500);
 
     LServer.Active := True;
-    WriteLn('Listening on port ', APort);
-    WriteLn('Navigate to http://localhost:', APort);
-    Write('CTRL+C to shutdown the server');
+    LogI('Listening on port ' + APort.ToString);
+    LogI('Navigate to http://localhost:' + APort.ToString);
+    LogI('CTRL+C to shutdown the server');
     WaitForTerminationSignal;
     EnterInShutdownState;
     LServer.Active := False;
@@ -65,7 +65,7 @@ begin
       function: IMVCDotEnv
       begin
         Result := NewDotEnv
-                 .WithStrategy(TMVCDotEnvPriority.FileThenEnv)
+                 .UseStrategy(TMVCDotEnvPriority.FileThenEnv)
                                        //if available, by default, loads default environment (.env)
                  .UseProfile('test') //if available loads the test environment (.env.test)
                  .UseProfile('prod') //if available loads the prod environment (.env.prod)
@@ -89,6 +89,6 @@ begin
     RunServer(dotEnv.Env('dmvc.server.port', 8080));
   except
     on E: Exception do
-      Writeln(E.ClassName, ': ', E.Message);
+      LogF(E.ClassName + ': ' + E.Message);
   end;
 end.

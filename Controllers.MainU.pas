@@ -4,15 +4,14 @@ interface
 
 uses
   MVCFramework, MVCFramework.Commons, MVCFramework.Serializer.Commons, System.Generics.Collections,
-  Entitiles.TodoU;
+  Entities.TodoU;
 
 type
 
   [MVCPath]
   TMyController = class(TMVCController)
   protected
-    procedure MVCControllerAfterCreate; override;
-    procedure MVCControllerBeforeDestroy; override;
+    procedure OnBeforeAction(AContext: TWebContext; const AActionName: string; var AHandled: Boolean); override;
   public
     [MVCPath]
     [MVCHTTPMethod([httpGET])]
@@ -20,7 +19,7 @@ type
 
     [MVCPath('/add')]
     [MVCHTTPMethod([httpPOST])]
-    function AddTodo(const [MVCFromBody] ToDo: TTodo): String;
+    function CreateTodo(const [MVCFromBody] ToDo: TTodo): String;
 
     [MVCPath('/delete/($id)')]
     [MVCHTTPMethod([httpDELETE])]
@@ -32,7 +31,7 @@ type
 
     [MVCPath('/edit/($id)')]
     [MVCHTTPMethod([httpPUT])]
-    function SaveTodo(const id: Integer; const [MVCFromBody] ToDo: TTodo): String;
+    function UpdateTodo(const id: Integer; const [MVCFromBody] ToDo: TTodo): String;
   end;
 
 implementation
@@ -42,9 +41,9 @@ uses
   System.StrUtils, MVCFramework.ActiveRecord,
   FDConnectionConfigU, JsonDataObjects;
 
-function TMyController.AddTodo(const ToDo: TTodo): String;
+function TMyController.CreateTodo(const ToDo: TTodo): String;
 begin
-  ToDo.Store;
+  ToDo.Insert;
   var lJSON := ObjectToJSONObject(ToDo);
   try
     Result := PageFragment(['todo/item'], lJSON);
@@ -88,38 +87,23 @@ begin
   end;
 end;
 
-procedure TMyController.MVCControllerAfterCreate;
+procedure TMyController.OnBeforeAction(AContext: TWebContext; const AActionName: string; var AHandled: Boolean);
 begin
   inherited;
-  var lConn := TFDConnection.Create(nil);
-  lConn.ConnectionDefName := CON_DEF_NAME;
-  ActiveRecordConnectionsRegistry.AddDefaultConnection(lConn, True);
   SetPagesCommonHeaders(['header']);
   SetPagesCommonFooters(['footer']);
 end;
 
-procedure TMyController.MVCControllerBeforeDestroy;
+function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;
 begin
-  ActiveRecordConnectionsRegistry.RemoveDefaultConnection(True);
-  inherited;
-end;
-
-function TMyController.SaveTodo(const id: Integer; const ToDo: TTodo): String;
-begin
-  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
+  ToDo.ID := id;
+  ToDo.Update(True);
+  var lJSON := ObjectToJSONObject(ToDo);
   try
-    ToDo.ID := id;
-    ToDo.Store;
-    var lJSON := ObjectToJSONObject(ToDo);
-    try
-      Result := PageFragment(['todo/item'], lJSON);
-    finally
-      lJSON.Free;
-    end;
+    Result := PageFragment(['todo/item'], lJSON);
   finally
-    lTodo.Free;
+    lJSON.Free;
   end;
-
 end;
 
 end.

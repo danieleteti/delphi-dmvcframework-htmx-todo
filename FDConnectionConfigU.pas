@@ -35,7 +35,7 @@ begin
     if AIsPooled then
     begin
       LParams.Add('Pooled=True');
-      LParams.Add('POOL_MaximumItems=100');
+      LParams.Add('POOL_MaximumItems=200');
     end
     else
     begin
