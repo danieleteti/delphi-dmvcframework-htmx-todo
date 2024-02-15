@@ -4,14 +4,12 @@ interface
 
 uses
   MVCFramework, MVCFramework.Commons, MVCFramework.Serializer.Commons, System.Generics.Collections,
-  Entities.TodoU;
+  Entities.TodoU, MVCFramework.HTMX;
 
 type
 
   [MVCPath]
   TMyController = class(TMVCController)
-  protected
-    procedure OnBeforeAction(AContext: TWebContext; const AActionName: string; var AHandled: Boolean); override;
   public
     [MVCPath]
     [MVCHTTPMethod([httpGET])]
@@ -32,6 +30,10 @@ type
     [MVCPath('/edit/($id)')]
     [MVCHTTPMethod([httpPUT])]
     function UpdateTodo(const id: Integer; const [MVCFromBody] ToDo: TTodo): String;
+
+    [MVCPath('/todos/($id)')]
+    [MVCHTTPMethod([httpGET])]
+    function GetTodo(const id: Integer): String;
   end;
 
 implementation
@@ -46,7 +48,7 @@ begin
   ToDo.Insert;
   var lJSON := ObjectToJSONObject(ToDo);
   try
-    Result := PageFragment(['todo/item'], lJSON);
+    Result := Page(['todo/_item'], lJSON, False);
   finally
     lJSON.Free;
   end;
@@ -70,7 +72,7 @@ begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
   try
     ViewData['todo'] := lTodo;
-    Result := PageFragment(['todo/form']);
+    Result := PageFragment(['todo/_form']);
   finally
     lTodo.Free;
   end;
@@ -81,17 +83,26 @@ begin
   var lTodos := TMVCActiveRecord.All<TTodo>;
   try
     ViewData['todos'] := lTodos;
+    ViewData['ispage'] := not Context.Request.IsHTMX;
     Result := Page(['home']);
   finally
     lTodos.Free;
   end;
 end;
 
-procedure TMyController.OnBeforeAction(AContext: TWebContext; const AActionName: string; var AHandled: Boolean);
+function TMyController.GetTodo(const id: Integer): String;
 begin
-  inherited;
-  SetPagesCommonHeaders(['header']);
-  SetPagesCommonFooters(['footer']);
+  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
+  try
+    var lJSON := ObjectToJSONObject(lToDo);
+    try
+      Result := Page(['todo/_item'], lJSON);
+    finally
+      lJSON.Free;
+    end;
+  finally
+    lTodo.Free;
+  end;
 end;
 
 function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;
@@ -100,7 +111,7 @@ begin
   ToDo.Update(True);
   var lJSON := ObjectToJSONObject(ToDo);
   try
-    Result := PageFragment(['todo/item'], lJSON);
+    Result := Page(['todo/_item'], lJSON);
   finally
     lJSON.Free;
   end;

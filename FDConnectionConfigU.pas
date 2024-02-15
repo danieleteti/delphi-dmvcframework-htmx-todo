@@ -13,14 +13,7 @@ uses
   System.Classes,
   System.IOUtils,
   FireDAC.Comp.Client,
-  FireDAC.Moni.Base,
-  FireDAC.Moni.FlatFile,
-  FireDAC.Stan.Intf
-  ;
-
-
-var
-  gFlatFileMonitor: TFDMoniFlatFileClientLink = nil;
+  FireDAC.Stan.Intf;
 
 procedure CreateSqlitePrivateConnDef(AIsPooled: boolean);
 var
@@ -46,22 +39,6 @@ begin
     LParams.Free;
   end;
 end;
-
-initialization
-
-gFlatFileMonitor := TFDMoniFlatFileClientLink.Create(nil);
-gFlatFileMonitor.FileColumns := [tiRefNo, tiTime, tiThreadID, tiClassName, tiObjID, tiMsgText];
-gFlatFileMonitor.EventKinds := [
-    ekVendor, ekConnConnect, ekLiveCycle, ekError, ekConnTransact,
-    ekCmdPrepare, ekCmdExecute, ekCmdDataIn, ekCmdDataOut];
-gFlatFileMonitor.ShowTraces := False;
-gFlatFileMonitor.FileAppend := False;
-gFlatFileMonitor.FileName := TPath.ChangeExtension(ParamStr(0), '.trace.log');
-gFlatFileMonitor.Tracing := True;
-
-finalization
-
-gFlatFileMonitor.Free;
 
 end.
 

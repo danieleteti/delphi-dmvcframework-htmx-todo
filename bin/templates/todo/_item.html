@@ -1,0 +1,4 @@
+<li class="uk-flex uk-flex-between" style="cursor: pointer" hx-trigger="keyup[key=='pEscape']" hx-get="/cancel">
+    <p hx-get="/edit/{{id}}"><span uk-icon="file-edit"></span> {{content}}</p>
+    <button class="uk-icon-button" uk-icon="icon: close" hx-delete="/delete/{{id}}"></button>
+</li>
