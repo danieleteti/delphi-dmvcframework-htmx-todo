@@ -3,8 +3,8 @@ unit Controllers.MainU;
 interface
 
 uses
-  MVCFramework, MVCFramework.Commons, MVCFramework.Serializer.Commons, System.Generics.Collections,
-  Entities.TodoU, MVCFramework.HTMX;
+  MVCFramework, MVCFramework.Serializer.Commons, System.Generics.Collections,
+  Entities.TodoU, MVCFramework.HTMX, MVCFramework.Commons;
 
 type
 
@@ -84,6 +84,7 @@ begin
   try
     ViewData['todos'] := lTodos;
     ViewData['ispage'] := not Context.Request.IsHTMX;
+    ViewData['version'] := 'DMVCFramework ' + DMVCFRAMEWORK_VERSION;
     Result := Page(['home']);
   finally
     lTodos.Free;
