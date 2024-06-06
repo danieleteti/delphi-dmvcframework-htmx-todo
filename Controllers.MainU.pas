@@ -10,6 +10,8 @@ type
 
   [MVCPath]
   TMyController = class(TMVCController)
+  protected
+    procedure OnBeforeAction(AContext: TWebContext; const AActionName: string; var AHandled: Boolean); override;
   public
     [MVCPath]
     [MVCHTTPMethod([httpGET])]
@@ -83,7 +85,6 @@ begin
   var lTodos := TMVCActiveRecord.All<TTodo>;
   try
     ViewData['todos'] := lTodos;
-    ViewData['ispage'] := not Context.Request.IsHTMX;
     ViewData['version'] := 'DMVCFramework ' + DMVCFRAMEWORK_VERSION;
     Result := Page(['home']);
   finally
@@ -104,6 +105,13 @@ begin
   finally
     lTodo.Free;
   end;
+end;
+
+procedure TMyController.OnBeforeAction(AContext: TWebContext;
+  const AActionName: string; var AHandled: Boolean);
+begin
+  inherited;
+  ViewData['ispage'] := not Context.Request.IsHTMX;
 end;
 
 function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;

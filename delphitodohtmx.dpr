@@ -12,6 +12,10 @@ uses
   Web.ReqMulti,
   Web.WebReq,
   Web.WebBroker,
+{$IFDEF MSWINDOWS}
+  Winapi.ShellAPI,
+  Winapi.Windows,
+{$ENDIF }
   IdContext,
   IdHTTPWebBrokerBridge,
   Controllers.MainU in 'Controllers.MainU.pas',
@@ -39,6 +43,11 @@ begin
     LogI('Listening on port ' + APort.ToString);
     LogI('Navigate to http://localhost:' + APort.ToString);
     LogI('CTRL+C to shutdown the server');
+
+    {$IF Defined(MSWINDOWS)}
+    ShellExecute(0, 'open', PChar('http://localhost:' + inttostr(APort)), nil, nil, SW_SHOW);
+    {$ENDIF}
+
     WaitForTerminationSignal;
     EnterInShutdownState;
     LServer.Active := False;
