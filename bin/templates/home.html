@@ -1,4 +1,4 @@
-{{#ispage}}{{>_header}}{{/ispage}}
+{{if(ispage)}}{{include("_header.html")}}{{endif}}
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-top">
     <form id="todoForm" class="uk-form-horizontal" hx-post="/add" hx-swap="beforeend" hx-target="#todoItems"
         hx-trigger="submit">
@@ -9,9 +9,9 @@
         </div>
     </form>
     <ul id="todoItems" class="uk-list uk-list-divider" hx-target="closest li" hx-swap="outerHTML">
-        {{#todos}}
-        {{>todo/_item}}
-        {{/todos}}
+        {{loop(todos)}}
+        {{include("todo/_item.html")}}
+        {{endloop}}
     </ul>
 </div>
-{{#ispage}}{{>_footer}}{{/ispage}}
+{{if(ispage)}}{{include("_footer.html")}}{{endif}}

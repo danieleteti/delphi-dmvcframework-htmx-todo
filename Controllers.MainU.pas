@@ -48,12 +48,8 @@ uses
 function TMyController.CreateTodo(const ToDo: TTodo): String;
 begin
   ToDo.Insert;
-  var lJSON := ObjectToJSONObject(ToDo);
-  try
-    Result := Page(['todo/_item'], lJSON, False);
-  finally
-    lJSON.Free;
-  end;
+  ViewData['todos'] := Todo;
+  Result := Page(['todo/_item']);
 end;
 
 function TMyController.DeleteTodo(const id: Integer): String;
@@ -96,12 +92,8 @@ function TMyController.GetTodo(const id: Integer): String;
 begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
   try
-    var lJSON := ObjectToJSONObject(lToDo);
-    try
-      Result := Page(['todo/_item'], lJSON);
-    finally
-      lJSON.Free;
-    end;
+    ViewData['todos'] := lToDo;
+    Result := Page(['todo/_item']);
   finally
     lTodo.Free;
   end;
@@ -118,12 +110,8 @@ function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;
 begin
   ToDo.ID := id;
   ToDo.Update(True);
-  var lJSON := ObjectToJSONObject(ToDo);
-  try
-    Result := Page(['todo/_item'], lJSON);
-  finally
-    lJSON.Free;
-  end;
+  ViewData['todos'] := ToDo;
+  Result := Page(['todo/_item']);
 end;
 
 end.

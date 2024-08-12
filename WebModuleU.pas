@@ -30,7 +30,7 @@ uses
   MVCFramework.Commons, 
   MVCFramework.Middleware.ActiveRecord, 
   MVCFramework.Middleware.StaticFiles,
-  MVCFramework.View.Renderers.Mustache,
+  MVCFramework.View.Renderers.TemplatePro,
   MVCFramework.Middleware.Analytics,
   MVCFramework.Middleware.Trace, 
   MVCFramework.Middleware.CORS, 
@@ -80,7 +80,7 @@ begin
   // The folder mapped as documentroot for TMVCStaticFilesMiddleware must exists!
   FMVC.AddMiddleware(TMVCStaticFilesMiddleware.Create('', TPath.Combine(ExtractFilePath(GetModuleName(HInstance)), 'www')));
 
-  FMVC.SetViewEngine(TMVCMustacheViewEngine);
+  FMVC.SetViewEngine(TMVCTemplateProViewEngine);
   FMVC.AddSerializer(TMVCMediaType.APPLICATION_FORM_URLENCODED, TMVCURLEncodedSerializer.Create);
   
   // Trace middlewares produces a much detailed log for debug purposes

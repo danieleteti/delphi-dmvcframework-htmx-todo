@@ -1,6 +1,6 @@
-<li class="uk-flex uk-flex-between" hx-swap="outerHTML" hx-target="this" hx-trigger="keyup[key=='Escape']" hx-get="/todos/{{todo.id}}">
-    <form id="todoForm" class="uk-form-horizontal uk-width-1-1" hx-put="/edit/{{todo.id}}" hx-trigger="submit,focusout">
-        <input hx-get="/edit/{{todo.id}}" autocomplete="off" autofocus class="uk-input" type="text" name="content" value="{{todo.content }}">
+<li class="uk-flex uk-flex-between" hx-swap="outerHTML" hx-target="this" hx-trigger="keyup[key=='Escape']" hx-get="/todos/{{:todo.id}}">
+    <form id="todoForm" class="uk-form-horizontal uk-width-1-1" hx-put="/edit/{{:todo.id}}" hx-trigger="submit,focusout">
+        <input hx-get="/edit/{{:todo.id}}" autocomplete="off" autofocus class="uk-input" type="text" name="content" value="{{:todo.content}}">
         <div style="font-size: 70%">Esc to leave edit, Enter to confirm</div>
     </form>
 </li>
