@@ -48,7 +48,7 @@ uses
 function TMyController.CreateTodo(const ToDo: TTodo): String;
 begin
   ToDo.Insert;
-  ViewData['todos'] := Todo;
+  ViewData['todo'] := Todo;
   Result := Page(['todo/_item']);
 end;
 
@@ -92,7 +92,7 @@ function TMyController.GetTodo(const id: Integer): String;
 begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
   try
-    ViewData['todos'] := lToDo;
+    ViewData['todo'] := lToDo;
     Result := Page(['todo/_item']);
   finally
     lTodo.Free;
@@ -109,8 +109,8 @@ end;
 function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;
 begin
   ToDo.ID := id;
-  ToDo.Update(True);
-  ViewData['todos'] := ToDo;
+  ToDo.Update;
+  ViewData['todo'] := ToDo;
   Result := Page(['todo/_item']);
 end;
 

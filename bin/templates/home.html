@@ -9,7 +9,7 @@
         </div>
     </form>
     <ul id="todoItems" class="uk-list uk-list-divider" hx-target="closest li" hx-swap="outerHTML">
-        {{loop(todos)}}
+        {{loop(todos) as todo}}
         {{include("todo/_item.html")}}
         {{endloop}}
     </ul>
