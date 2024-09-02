@@ -1,4 +1,4 @@
-{{if(ispage)}}{{include("_header.html")}}{{endif}}
+{{if ispage}}{{include "_header.html"}}{{endif}}
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-top">
     <form id="todoForm" class="uk-form-horizontal" hx-post="/add" hx-swap="beforeend" hx-target="#todoItems"
         hx-trigger="submit">
@@ -9,9 +9,9 @@
         </div>
     </form>
     <ul id="todoItems" class="uk-list uk-list-divider" hx-target="closest li" hx-swap="outerHTML">
-        {{loop(todos) as todo}}
-        {{include("todo/_item.html")}}
-        {{endloop}}
+        {{for todo in todos}}
+        {{include "todo/_item.html"}}
+        {{endfor}}
     </ul>
 </div>
-{{if(ispage)}}{{include("_footer.html")}}{{endif}}
+{{if ispage}}{{include "_footer.html"}}{{endif}}
