@@ -6,22 +6,22 @@ uses
   System.SysUtils,
   MVCFramework,
   MVCFramework.Logger,
-  MVCFramework.DotEnv,
   MVCFramework.Commons,
   MVCFramework.Signal,
   Web.ReqMulti,
   Web.WebReq,
   Web.WebBroker,
-{$IFDEF MSWINDOWS}
+  {$IFDEF MSWINDOWS}
   Winapi.ShellAPI,
   Winapi.Windows,
-{$ENDIF }
+  {$ENDIF }
   IdContext,
   IdHTTPWebBrokerBridge,
   Controllers.MainU in 'Controllers.MainU.pas',
   WebModuleU in 'WebModuleU.pas' {MyWebModule: TWebModule},
   Entities.TodoU in 'Entities.TodoU.pas',
-  FDConnectionConfigU in 'FDConnectionConfigU.pas';
+  FDConnectionConfigU in 'FDConnectionConfigU.pas',
+  TemplatePro in '..\templatepro\TemplatePro.pas';
 
 {$R *.res}
 
@@ -69,21 +69,6 @@ begin
   try
     if WebRequestHandler <> nil then
       WebRequestHandler.WebModuleClass := WebModuleClass;
-
-    dotEnvConfigure(
-      function: IMVCDotEnv
-      begin
-        Result := NewDotEnv
-                 .UseStrategy(TMVCDotEnvPriority.FileThenEnv)
-                                       //if available, by default, loads default environment (.env)
-                 .UseProfile('test') //if available loads the test environment (.env.test)
-                 .UseProfile('prod') //if available loads the prod environment (.env.prod)
-                 .UseLogger(procedure(LogItem: String)
-                            begin
-                              LogW('dotEnv: ' + LogItem);
-                            end)
-                 .Build();             //uses the executable folder to look for .env* files
-      end);
 
     WebRequestHandlerProc.MaxConnections := dotEnv.Env('dmvc.handler.max_connections', 1024);
 

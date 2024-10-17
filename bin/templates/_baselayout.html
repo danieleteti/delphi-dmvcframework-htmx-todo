@@ -1,3 +1,4 @@
+{{if ispage}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +20,7 @@
             transition: opacity 1s ease-out;
         }
     </style>
-
+    {{block "extraheaders"}}{{endblock}}
 </head>
 
 <body class="uk-background-secondary" uk-height-viewport>
@@ -29,3 +30,18 @@
         </div>
     </div>
     <div class="uk-container uk-flex uk-flex-center">
+        {{endif}}
+        {{block "body"}}{{endblock}}
+        {{if ispage}}
+    </div>
+
+    <script>
+        htmx.on('htmx:afterSwap', function (event) {
+            document.getElementById("contentInput").value = ""
+        });
+    </script>
+    <div style="text-align: center">{{:version}}</div>
+</body>
+
+</html>
+{{endif}}

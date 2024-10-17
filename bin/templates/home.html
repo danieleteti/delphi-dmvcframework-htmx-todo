@@ -1,4 +1,5 @@
-{{if ispage}}{{include "_header.html"}}{{endif}}
+{{extends "_baselayout.html"}}
+{{block "body"}}
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-top">
     <form id="todoForm" class="uk-form-horizontal" hx-post="/add" hx-swap="beforeend" hx-target="#todoItems"
         hx-trigger="submit">
@@ -14,4 +15,4 @@
         {{endfor}}
     </ul>
 </div>
-{{if ispage}}{{include "_footer.html"}}{{endif}}
+{{endblock}}
