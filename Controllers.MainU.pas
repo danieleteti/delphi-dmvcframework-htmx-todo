@@ -70,7 +70,7 @@ begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
   try
     ViewData['todo'] := lTodo;
-    Result := PageFragment(['todo/_form']);
+    Result := Page('todo/_form');
   finally
     lTodo.Free;
   end;
@@ -82,7 +82,7 @@ begin
   try
     ViewData['todos'] := lTodos;
     ViewData['version'] := 'DMVCFramework ' + DMVCFRAMEWORK_VERSION;
-    Result := Page(['home']);
+    Result := Page('home');
   finally
     lTodos.Free;
   end;
@@ -93,7 +93,7 @@ begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
   try
     ViewData['todo'] := lToDo;
-    Result := Page(['todo/_item']);
+    Result := Page('todo/_item');
   finally
     lTodo.Free;
   end;
@@ -111,7 +111,7 @@ begin
   ToDo.ID := id;
   ToDo.Update;
   ViewData['todo'] := ToDo;
-  Result := Page(['todo/_item']);
+  Result := Page('todo/_item');
 end;
 
 end.
