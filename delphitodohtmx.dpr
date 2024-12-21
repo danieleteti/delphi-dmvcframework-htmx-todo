@@ -45,7 +45,7 @@ begin
     LogI('CTRL+C to shutdown the server');
 
     {$IF Defined(MSWINDOWS)}
-    ShellExecute(0, 'open', PChar('http://localhost:' + inttostr(APort)), nil, nil, SW_SHOW);
+    ShellExecute(0, 'open', PChar('http://localhost:' + APort.ToString), nil, nil, SW_SHOW);
     {$ENDIF}
 
     WaitForTerminationSignal;
@@ -65,6 +65,10 @@ begin
   // When MVCSerializeNulls = True empty nullables and nil are serialized as json null.
   // When MVCSerializeNulls = False empty nullables and nil are not serialized at all.
   MVCSerializeNulls := True;
+
+  UseConsoleLogger := True;
+
+  UseLoggerVerbosityLevel := TLogLevel.levDebug;
 
   try
     if WebRequestHandler <> nil then
