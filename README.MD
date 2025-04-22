@@ -5,7 +5,7 @@ This demo is about htmx support in DMVCFramework.
 It uses:
 - [DMVCFramework](https://github.com/danieleteti/delphimvcframework)
 - [htmx](https://htmx.org/)
-- mustache
+- [TemplatePro](https://github.com/danieleteti/templatepro)
 - MVCActiveRecord (with a SQLite database)
 
 [My Blog](https://www.danieleteti.it)
