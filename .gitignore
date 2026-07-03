@@ -73,3 +73,9 @@ modules/.log
 
 
 *.tpcu
+
+# SQLite database and journal files (auto-created at runtime from bin/schema.sql)
+bin/todo.db
+bin/*.db-journal
+bin/*.db-shm
+bin/*.db-wal

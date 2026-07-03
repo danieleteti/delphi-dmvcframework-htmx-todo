@@ -25,17 +25,12 @@ implementation
 
 {$R *.dfm}
 
-uses 
-  System.IOUtils, 
-  MVCFramework.Commons, 
-  MVCFramework.Middleware.ActiveRecord, 
+uses
+  System.IOUtils,
+  MVCFramework.Commons,
+  MVCFramework.Middleware.ActiveRecord,
   MVCFramework.Middleware.StaticFiles,
   MVCFramework.View.Renderers.TemplatePro,
-  MVCFramework.Middleware.Analytics,
-  MVCFramework.Middleware.Trace, 
-  MVCFramework.Middleware.CORS, 
-  MVCFramework.Middleware.ETag,
-  MVCFramework.Middleware.Compression,
   MVCFramework.Serializer.URLEncoded,
   Controllers.MainU, FDConnectionConfigU;
 
@@ -69,51 +64,16 @@ begin
     end);
   FMVC.AddController(TMyController);
 
-  
-  
-  // Analytics middleware generates a csv log, useful to do traffic analysis
-  //FMVC.AddMiddleware(TMVCAnalyticsMiddleware.Create(GetAnalyticsDefaultLogger));
-  
-  // The folder mapped as documentroot for TMVCStaticFilesMiddleware must exists!
+  // Serves static files from bin/www (folder must exist).
   FMVC.AddMiddleware(TMVCStaticFilesMiddleware.Create('', TPath.Combine(ExtractFilePath(GetModuleName(HInstance)), 'www')));
 
   FMVC.SetViewEngine(TMVCTemplateProViewEngine);
   FMVC.AddSerializer(TMVCMediaType.APPLICATION_FORM_URLENCODED, TMVCURLEncodedSerializer.Create);
-  
-  // Trace middlewares produces a much detailed log for debug purposes
-  //FMVC.AddMiddleware(TMVCTraceMiddleware.Create);
-  
-  // CORS middleware handles... well, CORS
-  //FMVC.AddMiddleware(TMVCCORSMiddleware.Create);
-  
-  // Simplifies TMVCActiveRecord connection definition
-  FMVC.AddMiddleware(TMVCActiveRecordMiddleware.Create(
-    CON_DEF_NAME, ''
-  ));
 
-  
-  // Compression middleware must be the last in the chain, just before the ETag, if present.
-  //FMVC.AddMiddleware(TMVCCompressionMiddleware.Create);
-  
-  // ETag middleware must be the latest in the chain
-  //FMVC.AddMiddleware(TMVCETagMiddleware.Create);
- 
-   
-  
-  {
-  FMVC.OnWebContextCreate( 
-    procedure(const Context: TWebContext) 
-    begin 
-      // Initialize services to make them accessibile from Context 
-      // Context.CustomIntfObject := TMyService.Create; 
-    end); 
-  
-  FMVC.OnWebContextDestroy(
-    procedure(const Context: TWebContext)
-    begin
-      //Cleanup services, if needed
-    end);
-  }
+  // Provides a FireDAC connection to MVCActiveRecord on each request.
+  // Optional middlewares you can enable here: Analytics, Trace, CORS,
+  // Compression (must be last but one), ETag (must be the very last).
+  FMVC.AddMiddleware(TMVCActiveRecordMiddleware.Create(CON_DEF_NAME, ''));
 end;
 
 procedure TMyWebModule.WebModuleDestroy(Sender: TObject);

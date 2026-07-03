@@ -57,17 +57,18 @@ begin
   var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id, False);
   try
     if Assigned(lTodo) then
-    begin
       lTodo.Delete(False);
-    end;
   finally
     lTodo.Free;
   end;
+  Result := ''; // htmx swaps outerHTML of the <li> with empty content -> removes the item
 end;
 
 function TMyController.EditTodo(const id: Integer): String;
 begin
-  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
+  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id, False);
+  if lTodo = nil then
+    raise EMVCException.Create(HTTP_STATUS.NotFound, 'Todo not found');
   try
     ViewData['todo'] := lTodo;
     Result := RenderView('todo/_form');
@@ -90,7 +91,9 @@ end;
 
 function TMyController.GetTodo(const id: Integer): String;
 begin
-  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id);
+  var lTodo := TMVCActiveRecord.GetByPK<TTodo>(id, False);
+  if lTodo = nil then
+    raise EMVCException.Create(HTTP_STATUS.NotFound, 'Todo not found');
   try
     ViewData['todo'] := lToDo;
     Result := RenderView('todo/_item');
@@ -108,10 +111,17 @@ end;
 
 function TMyController.UpdateTodo(const id: Integer; const ToDo: TTodo): String;
 begin
-  ToDo.ID := id;
-  ToDo.Update;
-  ViewData['todo'] := ToDo;
-  Result := RenderView('todo/_item');
+  var lExisting := TMVCActiveRecord.GetByPK<TTodo>(id, False);
+  if lExisting = nil then
+    raise EMVCException.Create(HTTP_STATUS.NotFound, 'Todo not found');
+  try
+    lExisting.Content := ToDo.Content;
+    lExisting.Update; // storage validation runs here -> 422 if content is empty
+    ViewData['todo'] := lExisting;
+    Result := RenderView('todo/_item');
+  finally
+    lExisting.Free;
+  end;
 end;
 
 end.

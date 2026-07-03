@@ -36,8 +36,28 @@
     </div>
 
     <script>
-        htmx.on('htmx:afterSwap', function (event) {
-            document.getElementById("contentInput").value = ""
+        // Clear the "add" input only when a new item was actually appended to the list
+        htmx.on('htmx:afterSwap', function (evt) {
+            if (evt.detail.target && evt.detail.target.id === 'todoItems') {
+                var input = document.getElementById("contentInput");
+                if (input) { input.value = ""; }
+            }
+        });
+
+        // Surface server errors (4xx/5xx) as a transient notification instead of failing silently.
+        // htmx does not swap error-response bodies by default, so without this the user sees nothing.
+        htmx.on('htmx:responseError', function (evt) {
+            var status = (evt.detail.xhr && evt.detail.xhr.status) ? evt.detail.xhr.status : 0;
+            var msg = 'Request failed';
+            if (status === 404) { msg = 'Todo not found'; }
+            else if (status === 422) { msg = 'Content cannot be empty'; }
+            else if (status) { msg = 'Request failed (' + status + ')'; }
+            UIkit.notification({
+                message: '<span uk-icon="icon: warning"></span> ' + msg,
+                status: 'danger',
+                pos: 'top-center',
+                timeout: 3000
+            });
         });
     </script>
     <div style="text-align: center">{{:version}}</div>

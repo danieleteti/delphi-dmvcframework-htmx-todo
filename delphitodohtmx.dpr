@@ -83,6 +83,7 @@ begin
     end;
 
     FDConnectionConfigU.CreateSqlitePrivateConnDef(True);
+    FDConnectionConfigU.EnsureSqliteDatabase;
 
     RunServer(dotEnv.Env('dmvc.server.port', 8080));
   except
