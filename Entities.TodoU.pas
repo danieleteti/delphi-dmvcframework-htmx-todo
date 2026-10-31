@@ -17,8 +17,12 @@ type
     FID: NullableInt32;
     [MVCTableField('content')]
     [MVCRequired('content is required')]
+    [MVCMaxLength(200, 'content must be at most 200 characters')]
     FContent: String;
   public
+    // Server-assigned: a JSON body cannot inject it (anti mass-assignment,
+    // honoured by both the JSON and the URLEncoded serializers).
+    [MVCDoNotDeserialize]
     property ID: NullableInt32 read FID write FID;
     property Content: String read FContent write FContent;
   end;
