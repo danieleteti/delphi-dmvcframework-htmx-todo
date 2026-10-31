@@ -1,4 +1,4 @@
 <li class="uk-flex uk-flex-between" style="cursor: pointer">
     <p hx-get="/edit/{{:todo.id}}" hx-trigger="click"><span uk-icon="file-edit"></span> {{:todo.content}}</p>
-    <button class="uk-icon-button" uk-icon="icon: close" hx-delete="/delete/{{:todo.id}}"></button>
+    <button class="uk-icon-button" uk-icon="icon: close" hx-delete="/delete/{{:todo.id}}" hx-confirm="Delete this todo?"></button>
 </li>

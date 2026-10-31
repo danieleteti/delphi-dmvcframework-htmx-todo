@@ -2,7 +2,7 @@
     <form id="todoForm" class="uk-form-horizontal uk-width-1-1" hx-put="/edit/{{:todo.id}}" hx-trigger="submit,focusout"
         hx-validate>
         <input autocomplete="off" autofocus class="uk-input" type="text" name="content" value="{{:todo.content}}"
-            required>
+            maxlength="200" required>
         <div style="font-size: 70%">Esc to leave edit, Enter to confirm</div>
     </form>
 </li>
