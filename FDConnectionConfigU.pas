@@ -18,6 +18,7 @@ uses
   System.SysUtils,
   System.IOUtils,
   FireDAC.Comp.Client,
+  FireDAC.Comp.ScriptCommands,
   FireDAC.Comp.Script,
   FireDAC.Stan.Intf;
 
